@@ -1,0 +1,239 @@
+/* Classic Win9x utility look. System fonts only; everything is inlined into the standalone HTML. */
+:root {
+  --desktop: #008080;
+  --face: #c0c0c0;
+  --light: #ffffff;
+  --hilite: #dfdfdf;
+  --shadow: #808080;
+  --dark: #000000;
+  --navy: #000080;
+  --tooltip: #ffffe1;
+  --ui-font: "MS Sans Serif", "Microsoft Sans Serif", Tahoma, Geneva, Verdana, sans-serif;
+  --mono: "Lucida Console", "Courier New", monospace;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  padding: 24px 12px 32px;
+  background: var(--desktop);
+  color: var(--dark);
+  font: 12px/1.4 var(--ui-font);
+}
+
+/* ── window chrome ─────────────────────────────────────────── */
+.window {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 3px;
+  background: var(--face);
+  box-shadow: inset -1px -1px var(--dark), inset 1px 1px var(--hilite),
+              inset -2px -2px var(--shadow), inset 2px 2px var(--light);
+}
+.titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 3px 3px 3px 5px;
+  background: linear-gradient(90deg, var(--navy), #1084d0);
+  color: var(--light);
+  font-weight: bold;
+  user-select: none;
+}
+.titlebar-buttons { display: flex; gap: 2px; }
+.titlebar-buttons span {
+  width: 16px;
+  height: 14px;
+  background: var(--face);
+  color: var(--dark);
+  font: bold 10px/12px var(--ui-font);
+  text-align: center;
+  box-shadow: inset -1px -1px var(--dark), inset 1px 1px var(--light), inset -2px -2px var(--shadow);
+}
+.window-body { padding: 8px 8px 4px; }
+
+/* ── group boxes ───────────────────────────────────────────── */
+fieldset {
+  margin: 0 0 10px;
+  padding: 8px 10px 10px;
+  border: 1px solid var(--shadow);
+  box-shadow: inset 1px 1px var(--light), 1px 1px var(--light);
+  min-width: 0;
+}
+legend { padding: 0 3px; }
+fieldset:disabled legend { color: var(--shadow); text-shadow: 1px 1px var(--light); }
+fieldset.done > legend::after { content: "  \2714"; color: #008000; text-shadow: none; }
+fieldset p { margin: 0 0 8px; }
+
+/* ── controls ──────────────────────────────────────────────── */
+.form-grid {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr) max-content minmax(0, 1fr);
+  gap: 6px 10px;
+  align-items: center;
+}
+.form-grid.cols-2 { grid-template-columns: max-content minmax(0, 220px); }
+
+button {
+  min-width: 75px;
+  min-height: 23px;
+  padding: 0 12px;
+  border: 0;
+  background: var(--face);
+  color: var(--dark);
+  font: inherit;
+  box-shadow: inset -1px -1px var(--dark), inset 1px 1px var(--light),
+              inset -2px -2px var(--shadow), inset 2px 2px var(--hilite);
+  cursor: default;
+}
+button.default {
+  box-shadow: 0 0 0 1px var(--dark), inset -1px -1px var(--dark), inset 1px 1px var(--light),
+              inset -2px -2px var(--shadow), inset 2px 2px var(--hilite);
+}
+button:active:not(:disabled) {
+  padding: 1px 11px 0 13px;
+  box-shadow: inset -1px -1px var(--light), inset 1px 1px var(--dark),
+              inset -2px -2px var(--hilite), inset 2px 2px var(--shadow);
+}
+button:focus-visible { outline: 1px dotted var(--dark); outline-offset: -5px; }
+button:disabled { color: var(--shadow); text-shadow: 1px 1px var(--light); }
+button.saved::after { content: " \2714"; color: #008000; }
+button:disabled.saved::after { color: var(--shadow); }
+
+select, input[type="text"] {
+  height: 21px;
+  padding: 2px 3px;
+  border: 0;
+  border-radius: 0;
+  background: var(--light);
+  color: var(--dark);
+  font: inherit;
+  box-shadow: inset -1px -1px var(--light), inset 1px 1px var(--shadow),
+              inset -2px -2px var(--hilite), inset 2px 2px var(--dark);
+  min-width: 0;
+  width: 100%;
+}
+select:focus-visible, input[type="text"]:focus-visible { outline: 1px dotted var(--dark); outline-offset: -4px; }
+select:disabled, input[type="text"]:disabled { background: var(--face); color: var(--shadow); }
+
+.check { display: flex; gap: 6px; align-items: flex-start; margin: 8px 0 0; }
+.check input {
+  appearance: none;
+  flex: none;
+  width: 13px;
+  height: 13px;
+  margin: 1px 0 0;
+  background: var(--light) no-repeat center;
+  box-shadow: inset -1px -1px var(--light), inset 1px 1px var(--shadow),
+              inset -2px -2px var(--hilite), inset 2px 2px var(--dark);
+}
+.check input:checked {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='7'%3E%3Cpath d='M0 2h1v1h1v1h1V3h1V2h1V1h1V0h1v3H6v1H5v1H4v1H3v1H2V6H1V5H0z'/%3E%3C/svg%3E");
+}
+.check input:disabled { background-color: var(--face); }
+.check input:focus-visible { outline: 1px dotted var(--dark); outline-offset: 2px; }
+fieldset:disabled .check { color: var(--shadow); }
+
+.buttons { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 10px 0 0; }
+.buttons .msg { margin-left: 4px; }
+.hint { color: #404040; }
+
+code, .mono { font-family: var(--mono); font-size: 11px; }
+
+/* ── sunken panels: listview, log, wiring, progress ────────── */
+.sunken {
+  background: var(--light);
+  box-shadow: inset -1px -1px var(--light), inset 1px 1px var(--shadow),
+              inset -2px -2px var(--hilite), inset 2px 2px var(--dark);
+  padding: 2px;
+}
+.listview { margin: 10px 0 0; overflow-x: auto; }
+.listview table { border-collapse: collapse; width: 100%; }
+.listview th {
+  text-align: left;
+  font-weight: normal;
+  padding: 2px 6px;
+  background: var(--face);
+  box-shadow: inset -1px -1px var(--dark), inset 1px 1px var(--light), inset -2px -2px var(--shadow);
+  white-space: nowrap;
+}
+.listview td { padding: 2px 6px; font: 11px var(--mono); white-space: nowrap; }
+
+.flash-grid { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 12px; align-items: start; }
+.wiring { margin: 0; padding: 6px 8px; font: 11px/1.35 var(--mono); }
+
+.progress { height: 20px; margin: 10px 0 0; padding: 3px; }
+.progress-bar {
+  height: 100%;
+  width: 0;
+  background: repeating-linear-gradient(90deg, var(--navy) 0 9px, transparent 9px 11px);
+}
+.progress.busy .progress-bar {
+  width: 30% !important;
+  animation: marquee 1.2s steps(12) infinite;
+}
+@keyframes marquee { from { margin-left: 0; } to { margin-left: 70%; } }
+
+.log {
+  height: 120px;
+  margin: 8px 0 0;
+  overflow: auto;
+  white-space: pre-wrap;
+  font: 11px/1.35 var(--mono);
+}
+#flash-status { margin: 6px 0 0; min-height: 16px; }
+.error { color: #c00000; }
+.ok { color: #006000; }
+
+ol { margin: 0 0 4px; padding-left: 20px; }
+ol li { margin: 0 0 4px; }
+
+/* ── message box / status bar ─────────────────────────────── */
+.notice {
+  display: flex;
+  gap: 8px;
+  margin: 0 0 10px;
+  padding: 6px 8px;
+  background: var(--tooltip);
+  border: 1px solid var(--dark);
+}
+.notice::before {
+  content: "!";
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffd800;
+  border: 1px solid var(--dark);
+  font: bold 12px/16px var(--ui-font);
+  text-align: center;
+}
+.notice.danger::before { content: "\00d7"; background: #c00000; color: var(--light); }
+.notice p { margin: 0; }
+.notice p + p { margin-top: 4px; }
+
+.statusbar { display: flex; gap: 2px; margin-top: 2px; }
+.statusbar span {
+  flex: 0 0 auto;
+  padding: 2px 6px;
+  box-shadow: inset -1px -1px var(--light), inset 1px 1px var(--shadow);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.statusbar #sb-main { flex: 1 1 auto; min-width: 0; }
+
+.credits { max-width: 720px; margin: 10px auto 0; color: var(--light); font-size: 11px; text-align: center; }
+.credits a { color: var(--light); }
+
+@media (max-width: 640px) {
+  body { padding: 0; }
+  .window { max-width: none; }
+  .form-grid { grid-template-columns: max-content minmax(0, 1fr); }
+  .flash-grid { grid-template-columns: minmax(0, 1fr); }
+  .wiring { overflow-x: auto; }
+  .statusbar #sb-serial { display: none; }
+}

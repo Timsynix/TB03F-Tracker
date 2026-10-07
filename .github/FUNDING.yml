@@ -1,0 +1,8 @@
+# Shows a "Sponsor" button on the repository page once at least one entry is filled in.
+# Uncomment the platforms you use and put in your username or link.
+# Docs: https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository
+
+# github: your-github-username
+# ko_fi: your-ko-fi-name
+# buy_me_a_coffee: your-bmc-name
+# custom: ["https://www.paypal.me/your-name"]

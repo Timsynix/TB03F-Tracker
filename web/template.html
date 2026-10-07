@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="generator" content="__BUILD_INFO__">
+<title>TB-03F Flash Tool</title>
+<link rel="icon" href="data:,">
+<style>
+/*__CSS__*/
+</style>
+</head>
+<body>
+<div class="window">
+  <div class="titlebar">
+    <span>TB-03F Flash Tool</span>
+    <span class="titlebar-buttons" aria-hidden="true"><span>_</span><span>&#9633;</span><span>&times;</span></span>
+  </div>
+
+  <div class="window-body">
+    <div id="notice-env" class="notice" role="alert" hidden></div>
+    <div id="notice-dev" class="notice danger" role="alert" hidden></div>
+
+    <fieldset id="step-firmware">
+      <legend>1. Firmware</legend>
+      <div class="form-grid">
+        <label for="p-adv_interval_ms">Adv. interval:</label>
+        <select id="p-adv_interval_ms" data-param="adv_interval_ms" data-hint="How often the tag broadcasts. Shorter is found faster but drains the battery faster."></select>
+        <label for="p-power">TX power:</label>
+        <select id="p-power" data-param="power" data-hint="Radio output power. Higher reaches further and costs more battery."></select>
+        <label for="p-battery">Battery status:</label>
+        <select id="p-battery" data-param="battery" data-hint="Include the battery level in the broadcast so Macless Haystack can show it."></select>
+        <label for="p-rotation_min">Key rotation:</label>
+        <select id="p-rotation_min" data-param="rotation_min" data-hint="The tag cycles through 3 keys, switching after this period."></select>
+      </div>
+      <p class="buttons">Image: <span id="variant-status" class="mono">loading…</span></p>
+    </fieldset>
+
+    <fieldset id="step-keys" disabled>
+      <legend>2. Keys</legend>
+      <div class="form-grid cols-2">
+        <label for="tag-name">Tag name:</label>
+        <input id="tag-name" type="text" value="TB03F" maxlength="40" autocomplete="off" spellcheck="false" data-hint="Name shown in Macless Haystack and used for the downloaded file names.">
+      </div>
+      <label class="check"><input id="ack-own" type="checkbox">
+        <span>I will only use this tag to locate my own belongings, never to track people.</span></label>
+      <div class="buttons">
+        <button id="btn-generate" type="button" class="default" data-hint="Create 3 new P-224 key pairs in this browser and patch them into the image.">Generate keys</button>
+        <span id="keys-status" class="msg"></span>
+      </div>
+      <div id="keys-table-wrap" class="listview sunken" hidden>
+        <table>
+          <thead><tr><th>#</th><th>BLE MAC</th><th>Advertisement key</th><th>Hashed key</th></tr></thead>
+          <tbody id="keys-table"></tbody>
+        </table>
+      </div>
+    </fieldset>
+
+    <fieldset id="step-save" disabled>
+      <legend>3. Save keys</legend>
+      <p>Without <code>keys.json</code> the tag can never be located. Save it before flashing.</p>
+      <div class="buttons">
+        <button id="dl-keys-json" type="button" class="default" data-hint="Private keys for Macless Haystack: Accessories, Import from JSON File.">Save keys.json</button>
+        <button id="dl-public" type="button" data-hint="Advertisement and hashed keys plus BLE MACs. No private keys.">Public keys</button>
+        <button id="dl-dotkeys" type="button" data-hint="Same layout as generate_keys.py output. Contains the private keys.">.keys file</button>
+        <button id="dl-bin" type="button" data-hint="The patched firmware, for flashing with tb03f-pyflasher.py instead.">Patched .bin</button>
+      </div>
+      <label class="check"><input id="ack-saved" type="checkbox">
+        <span>I saved <code>keys.json</code> somewhere safe.</span></label>
+    </fieldset>
+
+    <fieldset id="step-flash" disabled>
+      <legend>4. Flash</legend>
+      <div class="flash-grid">
+        <pre class="wiring sunken" aria-label="Wiring: adapter TX to SWS, GND to GND, 3V3 to 3V3, optionally RTS or DTR to RST. Remove the CR2032 first.">
+ USB-UART (3.3 V)       TB-03F
+ +-----------+        +--------+
+ |        TX o--------o SWS    |
+ |       GND o--------o GND    |
+ |       3V3 o--------o 3V3    |
+ |   RTS/DTR o- - - - o RST    |
+ +-----------+        +--------+
+ RST link optional.
+ Remove the CR2032 first!</pre>
+        <div>
+          <div class="form-grid cols-2">
+            <label for="baud">Baud rate:</label>
+            <select id="baud" data-hint="460800 works with most CH340/CP2102/FT232 adapters.">
+              <option value="115200">115200</option>
+              <option value="230400">230400</option>
+              <option value="460800" selected>460800</option>
+              <option value="921600">921600</option>
+              <option value="1500000">1500000</option>
+              <option value="2000000">2000000</option>
+            </select>
+            <label for="activation">Activation:</label>
+            <select id="activation" data-hint="How long to hold the CPU-stop command. Must exceed the advertising interval unless RTS/DTR is wired to RST.">
+              <option value="1000">1 s</option>
+              <option value="2000">2 s</option>
+              <option value="3000">3 s</option>
+              <option value="5000" selected>5 s</option>
+              <option value="8000">8 s</option>
+              <option value="16000">16 s</option>
+            </select>
+          </div>
+          <p class="hint" id="activation-hint"></p>
+          <div class="buttons">
+            <button id="btn-flash" type="button" class="default" data-hint="Pick the USB-UART port and write the patched firmware.">Connect &amp; Flash</button>
+            <button id="btn-abort" type="button" hidden>Abort</button>
+          </div>
+          <p class="hint" id="flash-blocker"></p>
+        </div>
+      </div>
+      <div class="progress sunken" id="flash-progress"><div class="progress-bar"></div></div>
+      <p id="flash-status"></p>
+      <pre id="flash-log" class="log sunken"></pre>
+    </fieldset>
+
+    <fieldset id="step-verify" disabled>
+      <legend>5. Verify</legend>
+      <ol>
+        <li>Scan with a BLE app such as nRF Connect. The tag shows up as <code id="verify-mac">--</code>
+          with manufacturer data <code id="verify-payload">--</code>.</li>
+        <li>Every <span id="verify-rotation">--</span> the address changes as the tag moves on to keys 2 and 3.</li>
+        <li>In Macless Haystack choose <i>Import from JSON File</i> and pick the saved <code>keys.json</code>.
+          The first location reports can take a while.</li>
+      </ol>
+      <div class="buttons"><button id="btn-next" type="button">Flash another tag</button></div>
+    </fieldset>
+  </div>
+
+  <div class="statusbar">
+    <span id="sb-main">Ready</span>
+    <span id="sb-serial">Web Serial: ?</span>
+    <span id="sb-keys">Keys: none</span>
+  </div>
+</div>
+
+<p class="credits">
+  Firmware: <a href="https://github.com/stefexec/TB-03F-OpenHaystack-Firmware" target="_blank" rel="noopener">TB-03F-OpenHaystack-Firmware</a> &middot;
+  flashing protocol after pvvx's TLSR825x USB-COM flash writer &middot;
+  key format: <a href="https://github.com/dchristl/macless-haystack" target="_blank" rel="noopener">Macless Haystack</a><br>
+  Keys are generated in this page and never sent anywhere. Tracking people without consent is illegal.
+  <span id="build-info"></span>
+</p>
+
+<script type="application/json" id="fw-catalog">__CATALOG_JSON__</script>
+<script type="application/octet-stream" id="fw-pack">__FIRMWARE_PACK__</script>
+<script>
+/*__JS__*/
+</script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+# Build trees and outputs (scripts/build_catalog.sh, make_standalone.py)
+build/
+dist/
+
+# Private tracking keys: never commit
+*.keys
+keys.json
+*_keys.json
+*_devices.json
+*_keyfile
+
+# Generated firmware catalog (scripts/generate_firmware_variants.py)
+web/firmware/*
+!web/firmware/README.md
+web/dev-fixture/
+
+__pycache__/
+*.pyc
+node_modules/
+.claude/settings.local.json

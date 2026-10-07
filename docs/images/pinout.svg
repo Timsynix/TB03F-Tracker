@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="560" viewBox="0 0 640 560" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <title>TB-03F pinout, top view: pads used by this project highlighted</title>
+  <rect width="640" height="560" rx="12" fill="#ffffff"/>
+  <text x="24" y="38" font-size="20" font-weight="600" fill="#202124">TB-03F pinout (top view, metal shield facing you)</text>
+  <text x="24" y="60" font-size="13" fill="#5f6368">16 × 24 mm, 2 mm pad pitch. Pad names as printed in the Ai-Thinker datasheet.</text>
+
+  <!-- module outline: 16 x 24 mm at 13 px/mm -->
+  <g transform="translate(176,84)">
+    <rect x="0" y="0" width="208" height="312" rx="6" fill="#1b2a4a"/>
+    <!-- PCB antenna -->
+    <path d="M18 22 h40 v30 h24 v-30 h24 v30 h24 v-30 h24 v30 h20" fill="none" stroke="#d4a017" stroke-width="5"/>
+    <text x="104" y="78" font-size="12" fill="#c9d1e3" text-anchor="middle">PCB antenna</text>
+    <text x="104" y="93" font-size="11" fill="#c9d1e3" text-anchor="middle">(keep away from metal and the battery)</text>
+    <!-- shield -->
+    <rect x="26" y="104" width="156" height="188" rx="3" fill="#b8bcc4" stroke="#8a8f99"/>
+    <text x="104" y="190" font-size="24" font-weight="700" fill="#5d636e" text-anchor="middle">TB-03F</text>
+    <text x="104" y="212" font-size="12" fill="#5d636e" text-anchor="middle">TLSR8253</text>
+
+    <!-- left column pads (y = 8.5 .. 22.5 mm) -->
+    <g font-size="14">
+      <rect x="-9" y="102" width="18" height="12" rx="2" fill="#e8710a"/>
+      <rect x="-9" y="128" width="18" height="12" rx="2" fill="#c9a227"/>
+      <rect x="-9" y="154" width="18" height="12" rx="2" fill="#1a73e8"/>
+      <rect x="-9" y="180" width="18" height="12" rx="2" fill="#c9a227"/>
+      <rect x="-9" y="206" width="18" height="12" rx="2" fill="#c9a227"/>
+      <rect x="-9" y="232" width="18" height="12" rx="2" fill="#9aa0a6" stroke="#202124" stroke-dasharray="2 2"/>
+      <rect x="-9" y="258" width="18" height="12" rx="2" fill="#c9a227"/>
+      <rect x="-9" y="284" width="18" height="12" rx="2" fill="#d93025"/>
+      <g text-anchor="end">
+        <text x="-18" y="113" fill="#e8710a" font-weight="700">RST</text>
+        <text x="-18" y="139" fill="#3c4043">PC4</text>
+        <text x="-18" y="165" fill="#1a73e8" font-weight="700">SWS</text>
+        <text x="-18" y="191" fill="#3c4043">PC3</text>
+        <text x="-18" y="217" fill="#3c4043">PD7</text>
+        <text x="-18" y="243" fill="#5f6368" font-weight="700">PB7</text>
+        <text x="-18" y="269" fill="#3c4043">PB6</text>
+        <text x="-18" y="295" fill="#d93025" font-weight="700">3V3</text>
+      </g>
+    </g>
+
+    <!-- right column pads -->
+    <g font-size="14">
+      <rect x="199" y="102" width="18" height="12" rx="2" fill="#c9a227"/>
+      <rect x="199" y="128" width="18" height="12" rx="2" fill="#c9a227"/>
+      <rect x="199" y="154" width="18" height="12" rx="2" fill="#c9a227"/>
+      <rect x="199" y="180" width="18" height="12" rx="2" fill="#c9a227"/>
+      <rect x="199" y="206" width="18" height="12" rx="2" fill="#c9a227"/>
+      <rect x="199" y="232" width="18" height="12" rx="2" fill="#c9a227"/>
+      <rect x="199" y="258" width="18" height="12" rx="2" fill="#c9a227"/>
+      <rect x="199" y="284" width="18" height="12" rx="2" fill="#202124"/>
+      <g fill="#3c4043">
+        <text x="226" y="113">PB1</text>
+        <text x="226" y="139">PA0</text>
+        <text x="226" y="165">PC0</text>
+        <text x="226" y="191">PC1</text>
+        <text x="226" y="217">PD4</text>
+        <text x="226" y="243">PD3</text>
+        <text x="226" y="269">PD2</text>
+        <text x="226" y="295" fill="#202124" font-weight="700">GND</text>
+      </g>
+    </g>
+
+    <!-- bottom row pads -->
+    <g>
+      <rect x="33" y="303" width="12" height="18" rx="2" fill="#c9a227"/>
+      <rect x="59" y="303" width="12" height="18" rx="2" fill="#c9a227"/>
+      <rect x="85" y="303" width="12" height="18" rx="2" fill="#c9a227"/>
+      <rect x="111" y="303" width="12" height="18" rx="2" fill="#c9a227"/>
+      <rect x="137" y="303" width="12" height="18" rx="2" fill="#c9a227"/>
+      <rect x="163" y="303" width="12" height="18" rx="2" fill="#c9a227"/>
+      <g font-size="12" fill="#3c4043" text-anchor="end">
+        <text transform="translate(43,330) rotate(-90)">NC</text>
+        <text transform="translate(69,330) rotate(-90)">PA1</text>
+        <text transform="translate(95,330) rotate(-90)">PC2</text>
+        <text transform="translate(121,330) rotate(-90)">PB4</text>
+        <text transform="translate(147,330) rotate(-90)">PB5</text>
+        <text transform="translate(173,330) rotate(-90)">NC</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- legend -->
+  <g font-size="14" transform="translate(24,452)">
+    <rect x="0" y="0" width="14" height="14" rx="2" fill="#d93025"/><text x="22" y="12" fill="#202124"><tspan font-weight="700">3V3</tspan>: battery + / adapter 3V3</text>
+    <rect x="300" y="0" width="14" height="14" rx="2" fill="#202124"/><text x="322" y="12" fill="#202124"><tspan font-weight="700">GND</tspan>: battery − / adapter GND</text>
+    <rect x="0" y="26" width="14" height="14" rx="2" fill="#1a73e8"/><text x="22" y="38" fill="#202124"><tspan font-weight="700">SWS</tspan>: adapter TX (flashing only)</text>
+    <rect x="300" y="26" width="14" height="14" rx="2" fill="#e8710a"/><text x="322" y="38" fill="#202124"><tspan font-weight="700">RST</tspan>: adapter RTS or DTR (optional)</text>
+    <rect x="0" y="52" width="14" height="14" rx="2" fill="#9aa0a6" stroke="#202124" stroke-dasharray="2 2"/><text x="22" y="64" fill="#202124"><tspan font-weight="700">PB7</tspan>: leave unconnected, the firmware measures the battery voltage on it</text>
+    <text x="0" y="90" font-size="12" fill="#5f6368">Gold pads: not used. NC: no connection.</text>
+  </g>
+</svg>

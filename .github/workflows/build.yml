@@ -1,0 +1,63 @@
+name: Build firmware and standalone flasher
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']          # a version tag publishes TB03F-Flasher.html as a GitHub Release
+  pull_request:
+  workflow_dispatch:
+
+env:
+  UPSTREAM_REPO: https://github.com/stefexec/TB-03F-OpenHaystack-Firmware
+  UPSTREAM_COMMIT: c96e672914bf6e0f55426baf6425f219ec818939
+  TC32_URL: http://shyboy.oss-cn-shenzhen.aliyuncs.com/readonly/tc32_gcc_v2.0.tar.bz2
+  TC32_SHA256: ""   # pin after the first run (the install step prints it)
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write     # needed to create the release on tag pushes
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check out pinned upstream firmware
+        run: bash scripts/build_catalog.sh --list
+
+      - name: Unit tests
+        run: |
+          npm test
+          python3 -m unittest discover -s test/py
+
+      - name: Install tc32 toolchain
+        run: bash scripts/install_tc32.sh
+
+      - name: Build variants + verify + standalone HTML
+        run: bash scripts/build_catalog.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TB03F-Flasher
+          path: dist/TB03F-Flasher.html
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: firmware-catalog
+          path: web/firmware/
+
+      # Creates the release for a pushed tag. A release made by hand on github.com (which also creates the tag)
+      # is left untouched, so a manually uploaded TB03F-Flasher.html is never replaced.
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            echo "Release $GITHUB_REF_NAME already exists; leaving its files untouched."
+          else
+            gh release create "$GITHUB_REF_NAME" dist/TB03F-Flasher.html --title "$GITHUB_REF_NAME" --generate-notes
+          fi

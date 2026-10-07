@@ -1,0 +1,14 @@
+{
+  "name": "tb03f-web-flasher",
+  "private": true,
+  "type": "module",
+  "description": "All-in-one web flasher for TB-03F (Telink TLSR8253) OpenHaystack tags",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test \"test/js/*.test.mjs\"",
+    "test:py": "python -m unittest discover -s test/py",
+    "standalone": "python scripts/make_standalone.py"
+  }
+}

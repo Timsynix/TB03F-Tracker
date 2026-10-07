@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="300" viewBox="0 0 640 300" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <title>Battery wiring: holder plus to 3V3, holder minus to GND</title>
+  <rect width="640" height="300" rx="12" fill="#ffffff"/>
+  <text x="24" y="38" font-size="20" font-weight="600" fill="#202124">Wiring for operation</text>
+  <text x="24" y="60" font-size="13" fill="#5f6368">Only two wires. Insert the CR2032 after flashing, with the flashing wires removed.</text>
+
+  <!-- CR2032 holder -->
+  <g transform="translate(110,170)">
+    <rect x="-78" y="-62" width="156" height="124" rx="16" fill="#3c4043"/>
+    <circle cx="0" cy="0" r="50" fill="#c0c4ca" stroke="#80868b" stroke-width="3"/>
+    <text x="0" y="-6" font-size="15" font-weight="700" fill="#3c4043" text-anchor="middle">CR2032</text>
+    <text x="0" y="14" font-size="12" fill="#3c4043" text-anchor="middle">3 V</text>
+    <rect x="70" y="-36" width="26" height="12" rx="2" fill="#c9a227"/>
+    <rect x="70" y="24" width="26" height="12" rx="2" fill="#c9a227"/>
+    <text x="104" y="-40" font-size="16" font-weight="700" fill="#d93025">+</text>
+    <text x="104" y="22" font-size="16" font-weight="700" fill="#202124">−</text>
+  </g>
+
+  <!-- TB-03F -->
+  <g transform="translate(420,96)">
+    <rect x="0" y="0" width="180" height="150" rx="8" fill="#1b2a4a"/>
+    <text x="100" y="30" font-size="15" font-weight="600" fill="#ffffff" text-anchor="middle">TB-03F</text>
+    <g font-size="14" fill="#ffffff">
+      <text x="16" y="48">3V3</text>
+      <text x="16" y="108">GND</text>
+    </g>
+    <g fill="#c9a227">
+      <rect x="-6" y="37" width="12" height="12" rx="2"/>
+      <rect x="-6" y="97" width="12" height="12" rx="2"/>
+    </g>
+    <text x="16" y="136" font-size="11" fill="#c9d1e3">PB7 stays free (battery level)</text>
+  </g>
+
+  <g stroke-width="4" fill="none" stroke-linecap="round">
+    <polyline points="206,140 300,140 300,139 414,139" stroke="#d93025"/>
+    <polyline points="206,200 300,200 300,199 414,199" stroke="#202124"/>
+  </g>
+  <text x="310" y="132" font-size="12" fill="#d93025" text-anchor="middle">+ → 3V3</text>
+  <text x="310" y="192" font-size="12" fill="#202124" text-anchor="middle">− → GND</text>
+
+  <text x="24" y="276" font-size="13" fill="#202124">The firmware reports full / medium / low / critical at &gt; 2.8 V / ≤ 2.8 V / ≤ 2.5 V / ≤ 2.0 V.</text>
+
+</svg>
