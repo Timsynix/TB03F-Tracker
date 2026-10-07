@@ -11,7 +11,7 @@ completely offline in your browser.
 
 <p align="center">
   <a href="../../releases/latest/download/TB03F-Flasher.html"><b>⬇ Download the flasher (TB03F-Flasher.html)</b></a>
-  · <a href="#what-you-need">Parts</a> · <a href="#3-flash-the-firmware">Flash</a> · <a href="#6-see-it-on-a-map">Map</a>
+  · <a href="#what-you-need">Parts</a> · <a href="#1-flash-the-firmware">Flash</a> · <a href="#6-see-it-on-a-map">Map</a>
   · <a href="#troubleshooting">Troubleshooting</a>
 </p>
 
@@ -24,10 +24,10 @@ completely offline in your browser.
 
 - [How it works](#how-it-works)
 - [What you need](#what-you-need)
-- [1. Print the case](#1-print-the-case)
-- [2. Solder the electronics](#2-solder-the-electronics)
-- [3. Flash the firmware](#3-flash-the-firmware)
-- [4. Check that it works](#4-check-that-it-works)
+- [1. Flash the firmware](#1-flash-the-firmware)
+- [2. Check that it works](#2-check-that-it-works)
+- [3. Solder the battery holder](#3-solder-the-battery-holder)
+- [4. Print the case](#4-print-the-case)
 - [5. Assemble](#5-assemble)
 - [6. See it on a map](#6-see-it-on-a-map)
 - [Troubleshooting](#troubleshooting)
@@ -59,7 +59,7 @@ so your keys never leave your computer.
 | **CR2032 holder** with solder tabs | 1 | Holds the coin cell inside the case. | [Shop][shop-holder] |
 | **CR2032** 3 V coin cell | 1 | A brand-name cell lasts longer. | [Shop][shop-cr2032] |
 | **USB-UART adapter** with **3.3 V logic** | 1 | Reusable for every tag. Needs TX, GND and 3V3 pins; RTS or DTR is optional. Boards with a 3.3 V / 5 V jumper (CP2102, CH340, FT232) are fine. | [Shop][shop-uart] |
-| 3D-printed case | 1 | Body and lid; [STL files below](#1-print-the-case). | – |
+| 3D-printed case | 1 | Body and lid; [STL files below](#4-print-the-case). | – |
 
 <!-- When these are affiliate links, mark each one with " *" and enable the disclosure at the end of this file. -->
 
@@ -71,50 +71,34 @@ so your keys never leave your computer.
 - Optional: an **Android** phone with [nRF Connect](https://play.google.com/store/apps/details?id=no.nordicsemi.android.mcp) to check the tag
 - For the map: a computer that can run **Docker**, and an **Apple ID** with two-factor authentication by **SMS**
 
-## 1. Print the case
+## 1. Flash the firmware
 
-| File | Size |
-|---|---|
-| [`case/tracker_case_body.stl`](case/tracker_case_body.stl) | 45.7 × 36.0 × 11.8 mm, with a keyring lug (Ø 3.6 mm hole) |
-| [`case/tracker_case_lid.stl`](case/tracker_case_lid.stl) | Ø 36.0 × 5.2 mm, twist-on lid |
+Flash the bare module first. The battery holder comes later, so for now the USB-UART adapter powers the module.
 
-GitHub shows both files in 3D when you click them.
+### Connect the adapter
 
-- Print both parts the way they are oriented in the files: the body with its floor down, the lid with its top face down.
-- No supports are needed. The internal slot under the keyring lug has a bridge of about 17 mm, so make sure bridging
-  and part cooling are on.
-- Suggested settings: PLA or PETG, 0.2 mm layers, 3 perimeters, 20 % infill. Together the parts use less than 10 g of
-  filament.
-
-<!-- PHOTO: printed body and lid -->
-
-## 2. Solder the electronics
-
-The TB-03F has castellated pads with 2 mm spacing. You only need four of them:
+The TB-03F has castellated pads with 2 mm spacing. For flashing you need four of them:
 
 <p align="center"><img src="docs/images/pinout.svg" alt="TB-03F pinout: RST top left, SWS third on the left, 3V3 bottom left, GND bottom right; PB7 must stay free" width="560"></p>
 
-| Pad | Position (shield facing you, antenna at the top) | Connect to |
+| Pad | Position (shield facing you, antenna at the top) | Adapter pin |
 |---|---|---|
-| **3V3** | left column, bottom | battery holder **+** |
-| **GND** | right column, bottom | battery holder **−** |
-| **SWS** | left column, 3rd from top | adapter **TX**, for flashing only |
-| **RST** | left column, top | adapter **RTS** or **DTR**, optional, for flashing only |
+| **3V3** | left column, bottom | **3V3** |
+| **GND** | right column, bottom | **GND** |
+| **SWS** | left column, 3rd from top | **TX** |
+| **RST** | left column, top | **RTS** or **DTR**, optional |
 
-> [!IMPORTANT]
-> Leave **PB7** (left column, 6th from top) unconnected. The firmware measures the battery voltage on that pad.
+Solder thin temporary wires to these pads and connect them to the adapter. The RST wire is optional, but it makes
+flashing more reliable.
 
-1. **Battery holder:** solder the holder's **+** tab to **3V3** and its **−** tab to **GND**. Keep the wires short.
+<img src="docs/images/wiring-flash.svg" alt="Adapter 3V3 to 3V3, GND to GND, TX to SWS, optional RTS or DTR to RST" width="640">
 
-   <img src="docs/images/wiring-battery.svg" alt="CR2032 holder plus to 3V3, minus to GND" width="520">
+- Set the adapter to **3.3 V**. 5 V can damage the module.
+- Leave **PB7** (left column, 6th from top) unconnected, now and later. The firmware measures the battery voltage on it.
 
-2. **Flashing wire:** solder a thin wire to **SWS**, about 5–10 cm long. If your adapter has an RTS or DTR pin, add a
-   second wire to **RST**. It makes flashing more reliable but isn't required. The adapter's 3V3 and GND can clip onto
-   the battery holder's tabs, so you don't need extra wires for power.
+<!-- PHOTO: TB-03F with temporary flashing wires, connected to the adapter -->
 
-<!-- PHOTO: TB-03F with holder and flashing wire soldered -->
-
-## 3. Flash the firmware
+### Generate keys and flash
 
 1. **Download** [`TB03F-Flasher.html`](../../releases/latest/download/TB03F-Flasher.html) and open it in **Chrome, Edge or
    Opera** (double-click it, or right-click → *Open with*). It works offline; nothing gets installed.
@@ -140,36 +124,64 @@ The TB-03F has castellated pads with 2 mm spacing. You only need four of them:
    *Public keys* (no secrets), the *.keys file* (the `generate_keys.py` format, which includes the private keys) and the
    *patched .bin* are optional extras.
 
-5. **Flash:** take the coin cell out and connect the adapter:
+5. **Flash:** plug the adapter into USB, click **Connect & Flash** and choose its port, for example *USB Serial* or
+   *CP2102* / *CH340*. Flashing takes about 15 seconds, and the log shows each step. When it says *Done*, the module
+   restarts with the new firmware.
 
-   <img src="docs/images/wiring-flash.svg" alt="Adapter 3V3 to 3V3, GND to GND, TX to SWS, optional RTS or DTR to RST" width="640">
+## 2. Check that it works
 
-   - Set the adapter to **3.3 V**. 5 V can damage the module.
-   - Never connect the adapter's 3V3 while a coin cell is in the holder. A lithium coin cell must not be charged.
+Leave the adapter plugged in; it keeps powering the module.
 
-   Plug the adapter into USB, click **Connect & Flash** and choose its port, for example *USB Serial* or *CP2102* /
-   *CH340*. Flashing takes about 15 seconds, and the log shows each step. When it says *Done*, the module restarts
-   with the new firmware.
-
-<!-- PHOTO: adapter connected for flashing -->
-
-## 4. Check that it works
-
-1. Disconnect the adapter and insert the CR2032.
-2. Open **nRF Connect** on an Android phone and scan. The tag appears with the **BLE MAC** shown in step 5 of the flasher.
+1. Open **nRF Connect** on an Android phone and scan. The tag appears with the **BLE MAC** shown in step 5 of the flasher.
    Its manufacturer data is **Apple (0x004C)** and starts with `12 19`.
-3. After the key-rotation time, the address changes to key 2's MAC, and later to key 3's (all three are listed in the
+2. After the key-rotation time, the address changes to key 2's MAC, and later to key 3's (all three are listed in the
    flasher's key table).
 
 The connection to the module is write-only, so this scan is how you confirm the flash worked. iPhones hide Bluetooth
-addresses from apps, so use Android or a desktop BLE scanner.
+addresses from apps, so use Android or a desktop BLE scanner. If the tag doesn't show up, see
+[Troubleshooting](#troubleshooting) and flash again. It's easiest while the wires are still on.
+
+## 3. Solder the battery holder
+
+Once the tag works:
+
+1. Unplug the adapter and remove the temporary flashing wires.
+2. Solder the holder's **+** tab to **3V3** and its **−** tab to **GND**. Keep the wires short.
+
+   <img src="docs/images/wiring-battery.svg" alt="CR2032 holder plus to 3V3, minus to GND" width="520">
+
+3. Insert the CR2032. The tag starts broadcasting again; nRF Connect shows it as before.
+
+> [!CAUTION]
+> To reflash a tag later, take the coin cell out first. Never connect the adapter's 3V3 while a coin cell is in the
+> holder: a lithium coin cell must not be charged.
+
+<!-- PHOTO: soldering the battery holder (step by step) -->
+
+## 4. Print the case
+
+Print the case once the tag works.
+
+| File | Size |
+|---|---|
+| [`case/tracker_case_body.stl`](case/tracker_case_body.stl) | 45.7 × 36.0 × 11.8 mm, with a keyring lug (Ø 3.6 mm hole) |
+| [`case/tracker_case_lid.stl`](case/tracker_case_lid.stl) | Ø 36.0 × 5.2 mm, twist-on lid |
+
+GitHub shows both files in 3D when you click them.
+
+- Print both parts the way they are oriented in the files: the body with its floor down, the lid with its top face down.
+- No supports are needed. The internal slot under the keyring lug has a bridge of about 17 mm, so make sure bridging
+  and part cooling are on.
+- Suggested settings: PLA or PETG, 0.2 mm layers, 3 perimeters, 20 % infill. Together the parts use less than 10 g of
+  filament.
+
+<!-- PHOTO: printed body and lid -->
 
 ## 5. Assemble
 
-1. Remove the flashing wire(s). If you might want to reflash later, cut them short and insulate the ends instead.
-2. Place the module and the battery holder in the body. Keep the module's **antenna end** (the zig-zag trace at the
+1. Place the module and the battery holder in the body. Keep the module's **antenna end** (the zig-zag trace at the
    end opposite the pads) away from the battery and any metal.
-3. Put the lid on and **twist it** to lock it.
+2. Put the lid on and **twist it** to lock it.
 
 <!-- PHOTO: electronics in the open body, then the closed tracker -->
 
@@ -243,8 +255,9 @@ the new `keys.json`.
 <details>
 <summary><b>I want different settings</b></summary>
 
-Flash again with the same wiring and choose new settings. The flasher always generates new keys, so import the new
-`keys.json` and delete the old accessory.
+Take the coin cell out, connect the adapter as in [step 1](#1-flash-the-firmware) and flash again with new settings.
+The adapter's 3V3 and GND can go to the battery holder's + and − tabs. The flasher always generates new keys, so import
+the new `keys.json` and delete the old accessory.
 </details>
 
 ## FAQ
